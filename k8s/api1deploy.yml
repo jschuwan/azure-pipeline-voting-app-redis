@@ -17,7 +17,7 @@ spec:
        containers:
         - env:
             - name: API2_URL
-              value: http://api2:7072/api2
+              value: http://api2reimb-api:7072/api2
           image: jschuwan/api1reimb:latest
           name: api1reimb-api
           ports:
