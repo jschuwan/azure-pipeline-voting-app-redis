@@ -25,7 +25,7 @@ spec:
         io.kompose.service: api2
     spec:
       containers:
-        - image: api2
+        - image: jschuwan/api2reimb:latest
           name: api2
           ports:
             - containerPort: 7072
