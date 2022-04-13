@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: api1
+  name: api1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: api1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.1 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/my-apiToApi-network: "true"
+        io.kompose.service: api1
+    spec:
+      containers:
+        - env:
+            - name: API2_URL
+              value: http://api2:7072/api2
+          image: api1
+          name: api1
+          ports:
+            - containerPort: 7071
+          resources: {}
+      restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: api1
+  name: api1
+spec:
+  ports:
+    - name: "7071"
+      port: 7071
+      targetPort: 7071
+  selector:
+    io.kompose.service: api1
+status:
+  loadBalancer: {}
