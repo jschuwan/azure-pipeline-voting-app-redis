@@ -1,0 +1,104 @@
+
+trigger:
+  branches:
+    include:
+      - master
+      - main
+    exclude:
+      - elstupido
+      - randombranch
+  paths:
+    include:
+      - html/additional.yml
+    exclude:
+      - 
+name: $(date:yyyyMMdd).$(hello)  #.$(rev:rr)
+variables:
+  hello: world
+
+
+pool:
+  vmImage: ubuntu-latest
+  extends:
+    template: html\simple-param.yml
+    parameters:
+        yesNo: false # set to a non-boolean value to have the build fail
+
+
+
+parameters:
+- name: runAnalysis
+  displayName: do
+  type: boolean
+  default: false
+
+pr:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - folder/file.yml
+    - another
+stages:
+  - stage: one
+    condition: ${{ parameters.runAnalysis }}
+    displayName: youhaveonejob
+    jobs:
+    - job: processing
+    - template: html/copy.yml  # Template reference
+    
+    - job: continue
+      steps:
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: |
+              echo 'back to azure pipeline'
+
+  - stage: dockerize
+    condition: ${{ parameters.runAnalysis }}
+    dependsOn: one
+    jobs:
+      - job: adifferentjob      
+        steps:     
+        - task: PublishPipelineMetadata@0
+        - task: Docker@2
+          displayName: 'dockerize'
+          inputs:
+            containerRegistry: 'jschuwan_docker_hub'
+            repository: 'jschuwan/pipeline'
+            command: 'buildAndPush'
+            Dockerfile: 'Dockerfile'
+            tags: |
+              $(Build.BuildId)
+              latest
+  - stage: k8s
+    condition: ${{ parameters.runAnalysis }}
+    dependsOn: dockerize
+    jobs:
+      - job: kubectl
+        steps:
+          - task: Kubernetes@1
+            displayName: kubernetesBykubectl
+            inputs:
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceEndpoint: 'myAKSCluster2'
+              namespace: 'dev'
+              command: 'get'
+              arguments: 'pods'
+              #secretType: 'dockerRegistry'
+              #containerRegistryType: 'Azure Container Registry'
+      - job: deploytokubernetes
+        steps:
+          - task: KubernetesManifest@0
+            displayName: kubernetesBydeploytokuber
+            inputs:
+              action: 'deploy'
+              kubernetesServiceConnection: 'myAKSCluster2'
+              namespace: 'default'
+              manifests: 'k8s/*.yml'
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'
+              script: 'kubectl rollout restart -f k8s/deployment.yml'
