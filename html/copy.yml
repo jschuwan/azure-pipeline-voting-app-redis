@@ -23,7 +23,7 @@ jobs:
         projectName: 'jack-project0'
     - task: Maven@3
       inputs:
-        mavenPomFile: 'pom.xml'
+        mavenPomFile: 'api1Reimb/pom.xml'
         mavenOptions: '-Xmx3072m'
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: '1.8'
