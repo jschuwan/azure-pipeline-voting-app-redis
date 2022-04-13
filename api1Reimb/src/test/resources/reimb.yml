@@ -1,0 +1,43 @@
+reimb:
+  - id:1
+    emp_user_id:2
+    man_user_id:1
+    type:'FOOD'
+    amount:20.0
+    status:'PENDING'
+  - id:2
+    emp_user_id:2
+    man_user_id:1
+    type:'FOOD'
+    amount:20.0
+    status:'APPROVED'
+  - id:3
+    emp_user_id:2
+    man_user_id:1
+    type:'FOOD'
+    amount:20.0
+    status:'APPROVED'
+  - id:4
+    emp_user_id:2
+    man_user_id:1
+    type:'FOOD'
+    amount:20.0
+    status:'APPROVED'
+  - id:5
+    emp_user_id:2
+    man_user_id:1
+    type:'FOOD'
+    amount:20.0
+    status:'PENDING'
+  - id:6
+    emp_user_id:2
+    man_user_id:1
+    type:'FOOD'
+    amount:20.0
+    status:'PENDING'
+  - id:7
+    emp_user_id:2
+    man_user_id:1
+    type:'FOOD'
+    amount:20.0
+    status:'PENDING'

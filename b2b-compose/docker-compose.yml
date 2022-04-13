@@ -1,0 +1,33 @@
+version: "3.9"
+
+networks:
+  my-apiToApi-network:
+
+services:
+  api1:
+    #-------------------
+    #----you can do this
+    #image: ajduet/b2b-api
+    #----or you can do that
+    build: ../api1Reimb/
+    #---------------------
+    ports:
+      - 7071:7071
+    container_name: api1
+    environment:
+      - API2_URL=http://api2:7072/api2
+    networks:
+      - my-apiToApi-network
+  api2:
+    #-------------------
+    #----you can do this
+    #image: ajduet/b2b-api2
+    #----or you can do that
+    build: ../api2Reimb/
+    #---------------------
+    ports:
+      - 7072:7072
+    container_name: api2
+    networks:
+      - my-apiToApi-network
+

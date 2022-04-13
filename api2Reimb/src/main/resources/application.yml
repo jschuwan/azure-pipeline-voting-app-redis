@@ -1,0 +1,6 @@
+#server.port=8081
+server:
+    port: 7072
+    error:
+      include-binding-errors: always
+      include-message: always
