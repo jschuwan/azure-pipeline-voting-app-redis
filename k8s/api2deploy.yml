@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: api2reimb-dep
   labels:
-    app: api1reimb-api
+    app: api2reimb-api
 spec:
   replicas: 2
   selector:
