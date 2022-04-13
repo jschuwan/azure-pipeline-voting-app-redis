@@ -1,54 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.26.1 (HEAD)
-  creationTimestamp: null
+  name: api2reimb-dep
   labels:
-    io.kompose.service: api2
-  name: api2
+    app: api1reimb-api
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      io.kompose.service: api2
-  strategy: {}
+      app: api2reimb-api
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert
-        kompose.version: 1.26.1 (HEAD)
-      creationTimestamp: null
       labels:
-        io.kompose.network/my-apiToApi-network: "true"
-        io.kompose.service: api2
+        app: api2reimb-api
     spec:
       containers:
         - image: jschuwan/api2reimb:latest
-          name: api2
+          name: api2reimb-api
           ports:
             - containerPort: 7072
           resources: {}
       restartPolicy: Always
-status: {}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.26.1 (HEAD)
-  creationTimestamp: null
-  labels:
-    io.kompose.service: api2
-  name: api2
+  name: api2-service
 spec:
-  ports:
-    - name: "7072"
-      port: 7072
-      targetPort: 7072
   selector:
-    io.kompose.service: api2
-status:
-  loadBalancer: {}
+    app: api2reimb-api
+  type: LoadBalancer
+  ports:
+    - port: 7072
+      targetPort: 7072
